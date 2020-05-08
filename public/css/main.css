@@ -117,8 +117,11 @@ video {
 	color:red;
 }
 
-/*
-    position: absolute;
+.remote_video div
+{
+	position: absolute;
     bottom: 2%;
-    /* min-width: 100px; */
-    /*color: #666;*/
+    color: #666;
+
+}
+    
