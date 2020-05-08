@@ -296,6 +296,7 @@ function gotRemoteStream(event, id) {
 
         var divName_id = "txtUserName_"+id;
         div_name.setAttribute("id",divName_id)
+        div_name.setAttribute("class","video_name")
         syncUserbySocketId(id,divName_id);
         //div_name.innerHTML = usernames[id];
         
@@ -356,7 +357,7 @@ function syncUserbySocketId(socket_id,div_id) {
                result = d;
                if(result.status == 1)
                {
-                    $("#"+div_id).html(result.data.name)
+                    $("#"+div_id).html(result.data.name.toUpperCase())
                }
                else
                {

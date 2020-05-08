@@ -179,11 +179,18 @@ app.post('/profile/:user_id',async function(req, res) {
   sess.user_id = user.user_id;
   sess.name = user.name;
 
+
   if(input_dob)
   {
-      user.dob   = new Date(input_dob.split("/").reverse().join("-"));
+    var dt_conv = input_dob.split("/").reverse().join("-");
+    user.dob   = new Date(dt_conv);
+    if(user.dob == "Invalid Date")
+    {
+        error.dob ="Invalid date format"
+        user.dob = "";
+    }
   }
-    console.log(user.dob);
+  console.log(user.dob);
 
   var result_mob = await uModel.getUserbyMobile(user.mobile);
   if(result_mob.length > 0)
@@ -208,7 +215,8 @@ app.post('/profile/:user_id',async function(req, res) {
   }
   else
   { 
-      res.redirect("/mystream");  
+    var result =  await uModel.updateUser(user);
+    res.redirect("/mystream");  
   }
 
 });
