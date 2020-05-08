@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link href="/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/css/register.css" rel="stylesheet">
+	<script src="/js/jquery-3.3.1.slim.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+	<script src="/js/jquery.validate.js"></script>
+</head>
+<body>
+<div class="container">
+<div class="content">
+
+  <div class="col-md-6 col-sm-12 offset-md-3">
+    <h4 class="mb-3">Please enter your details</h4>
+    <form id="reg" name="register" action="/profile/<%= user.user_id %>" method="post">
+
+<input type="hidden" name="is_next" id="is_next" value="1">
+
+      <div class="form-group">
+    <label for="inputFullName">Full Name</label>
+    <input type="text" class="form-control" id="inputFullName" name="name" placeholder="Name" value="<%= user.name %>">
+  </div>
+  <div class="form-group">
+    <label for="inputEmail">Email</label>
+    <input type="email" class="form-control" id="inputEmail" name="email" placeholder="Email Address" value="<%= user.email%>" >
+    <% if(error && error.email){ %>
+      <label class="error"><%= error.email %></label>
+    <% } %>
+  </div>
+    <div class="form-group">
+    <label for="inputMobile">Mobile</label>
+    <input type="text" class="form-control" id="inputMobile" name="mobile" placeholder="mobile number" value="<%=user.mobile%>" >
+    <% if(error && error.mobile){ %>
+    <label class="error"><%= error.mobile %></label>
+    <% } %>
+  </div>
+  <div class="form-group">
+     <label for="inputMobile">Date of Birth</label>
+        <div class='input-group date' id='dobDateTimePicker'>
+          <input type="text" name="dob" id="inputDOB" class="form-control"  placeholder="DD/MM/YYYY" value="<% if(user.dob) { %><%= user.dob.getDate() + '/' + (user.dob.getMonth()+1) +'/'+ user.dob.getFullYear() %><% } %>">
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+        </div>
+   
+     
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputCity">City</label>
+      <input type="text" class="form-control" id="inputCity" name="city" placeholder="City" value="<%=user.city%>" >
+     
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputState">State</label>
+      <input type="text" class="form-control" id="inputState" name="state" placeholder="State" value="<%=user.state%>" >
+    </div>
+  </div>
+  
+  <div class="row">
+   <div class="col-md-12 col-sm-12 mt-3">
+   <button type="button" id="btnPrevious" class="btn btn-primary float-left">PREVIOUS</button>
+   <button type="submit" id="btnNext" class="btn btn-primary float-right">NEXT</button>
+   </div>
+ </div>
+</form>
+</div>
+
+<script type="text/javascript">
+
+  $(document).ready(function() {
+
+
+   
+
+    validation();
+    $("#btnPrevious").click(function(e)
+    {
+      // window.history.back();
+
+      location.replace("/register/<%= user.user_id %>");
+      // $("#is_next").val(0)
+      // $("form[name='register']").attr('action',$(this).attr('data-url'))
+      // $("form[name='register']").submit();
+
+    })
+     $("#btnNext").click(function(e)
+    {
+      
+      $("#is_next").val(1)
+      // $("form[name='register']").attr('action',$(this).attr('data-url'))
+      // $("form[name='register']").submit();
+    })
+  });
+
+
+
+  $.validator.addMethod(
+    "ddmmyyyy",
+    function(value, element) {
+        // put your own logic here, this is just a (crappy) example
+        return value.match(/^\d\d?\/\d\d?\/\d\d\d\d$/);
+    },
+    "Please enter a date in the format DD/MM/YYYY."
+  );
+
+
+    function validation()
+    {
+        $("#reg").validate({
+                    //ignore: "",
+                    rules: {    
+                      name: {                      
+                        required: true
+                      },      
+                      mobile: {
+                        required: true                      
+                      },
+                      email: {
+                        required: true                      
+                      },
+                      city: {
+                        required: true                      
+                      },
+                      state: {
+                        required: true                      
+                      },
+                      dob: {
+                        required: true,
+                        ddmmyyyy:true                      
+                      },
+                      is_pg_student: {
+                        required: true                      
+                      },
+                      // hdnPAId: {
+                      //   required: true,
+                      //   number:true,
+                      //   min:1              
+                      // }
+                    },
+                    messages:{
+                      //hdnPAId :"Please, search and select an Presenting Author Details"
+                    }                
+              });
+          
+    }
+
+
+    function load_profile() {
+      
+    }
+
+</script>
+
+</div>
+</div>
+
+</body>
+</html>

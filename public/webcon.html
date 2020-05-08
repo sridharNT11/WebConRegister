@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script> -->
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/bootstrap.min.js"></script>
+        <link href="/css/bootstrap.min.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="/css/main.css">
+    </head>
+
+    <body>
+        <div class="container">
+              <div class="jumbotron">
+               <div class="span1">
+                <button type="button" id="btnCreateRoom" class="btn btn-primary">  <i class="icon-video icon-white"></i>
+                    <span><strong>Create Room</strong></span>            
+                </button>
+
+             <!--    <button type="button" id="btnJoinRoom" class="btn btn-primary">  <i class="icon-pencil icon-white"></i>
+                    <span><strong>Join Room</strong></span>            
+                </button> -->
+                </div>
+                
+              </div>
+        </div>
+        
+
+    <!-- Model  -->
+        <div id="ModalCreateRoom" class="modal  fade" role="dialog">
+        <div class="modal-dialog modal-xl">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Information</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <p>
+               <label>Share Your New Room link: <span id="spanlink"></span>  </label>
+               <label>Share Your New Room number: <span id="spanRoom"></span>  </label>
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="btnStartRoom">Start Your Room</button>
+            <button type="button" class="btn btn-default"  data-dismiss="modal">Close</button>
+          </div>
+        </div>
+
+          </div>
+        </div>        
+
+
+         <div id="ModalJoinRoom" class="modal  fade" role="dialog">
+        <div class="modal-dialog modal-xl">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Information</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div class="col-md-6 col-sm-12 offset-md-3">
+                <h4 class="mb-3">Please enter your room number:</h4>
+                <form id="reg" name="register" action="register" method="post">
+                    <div class="form-group">
+                        <!--<label for="inputFullName">Mobile Number</label>-->
+                        <input type="text" class="form-control" id="room_no" name="room_no" placeholder="Room Number" value="" >
+                        <label id="errJoinRoom" class="error"></label>
+                    </div>
+                </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="btnStartJoinRoom">Start Your Room</button>
+            <button type="button" class="btn btn-default"  data-dismiss="modal">Close</button>
+          </div>
+        </div>
+
+          </div>
+        </div> 
+
+
+    <script type="text/javascript">
+        var room_no;
+        var room_link;
+        var spanlink = "#spanlink";
+        var spanRoom = "#spanRoom";
+
+
+        $(document).ready(function() {
+            $("#btnCreateRoom").click(function(e)
+            {
+                room_no = getRandom(9);
+                room_link = window.location.origin+"/room/"+room_no;
+                $(spanlink).text(room_link)
+                $(spanRoom).text(room_no)
+               var result =  syncCreateRoom(room_no)
+               if(result.status == 1)
+               {
+                $('#ModalCreateRoom').modal('show');  
+               }
+               else
+               {
+                    alert(result.error);
+               }
+               
+            });
+            $("#btnJoinRoom").click(function(e)
+            {
+                $('#ModalJoinRoom').modal('show');
+            });
+            
+            $("#btnStartRoom").click(function(e)
+            {
+                window.location.replace(room_link);
+            });
+
+            $("#btnStartJoinRoom").click(function(e)
+            {
+                $("#errJoinRoom").html("");
+                if($("#room_no").val())
+                {
+                    room_link = window.location.origin+"/room/"+$("#room_no").val();   
+                    window.location.replace(room_link);
+                }
+                else
+                {
+                    $("#errJoinRoom").html("Please enter your room number");
+                }
+                
+            });
+
+            
+        });
+
+        function getRandom(length) {
+            return Math.floor(Math.pow(10, length-1) + Math.random() * 9 * Math.pow(10, length-1));
+        }
+
+        function syncCreateRoom(roon_no) {
+            var result = null;
+            $.ajax({
+                url: '/api/room/create',
+                type: 'POST',
+                dataType: 'json',
+                async: false,
+                data: {'room_no': room_no},            
+                })
+            .done(function(d) {                                          
+               result = d;
+
+            })
+            .fail(function() {
+                //alert("Internal Server Error");
+                //return false;
+            });     
+            return result;
+        }
+    </script>
+
+    </body>
+</html>
