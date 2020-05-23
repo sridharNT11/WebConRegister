@@ -117,24 +117,30 @@ app.get('/register/:user_id?', async function(req, res) {
 
 
 app.post('/register',async function(req, res) {
-	var u = new User();
-	var result = await u.getUserbyMobile(req.body.mobile);
-  console.log(result)    
-   if(result.length > 0)
-   {
-      var user = result[0];
-      return profilePage(res,user);
-   }
-   else
-   {
-      await u.insertMobileUser(req.body.mobile);
-      var result = await u.getUserbyMobile(req.body.mobile);
-      if(result.length > 0)
-      {
-        var user = result[0];
-        return profilePage(res,user);
-      }
-   }
+  try 
+  {
+    	var u = new User();
+    	var result = await u.getUserbyMobile(req.body.mobile);
+      console.log(result)    
+       if(result.length > 0)
+       {
+          var user = result[0];
+          return profilePage(res,user);
+       }
+       else
+       {
+          await u.insertMobileUser(req.body.mobile);
+          var result = await u.getUserbyMobile(req.body.mobile);
+          if(result.length > 0)
+          {
+            var user = result[0];
+            return profilePage(res,user);
+          }
+       }
+    } catch (err) {
+      console.log(err);
+  }
+   
  
 });
 
@@ -239,6 +245,7 @@ app.post('/api/room/create',async function(req, res) {
     res.json({status : 1,error : ""});
 
   }catch(err) {
+    console.log(err);
     res.json({status : 0,error : "Error! Please try after some time"});
   }
 });

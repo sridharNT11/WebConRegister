@@ -5,10 +5,18 @@ var db ;
 function connectDatabase() {
     if (!db) {
         db = mysql.createConnection({
-		  host: "localhost",
-		  user: "root",
-		  password: "",
-		  database: "vt_stream"
+		  host: "test-db.cebwysbmrbmg.ap-southeast-1.rds.amazonaws.com",
+		  user: "admin",
+		  password: "admin123",
+		  database: "vt_stream",
+          // ssl: true,
+          // min: 4,
+          // max: 10,
+          // idleTimeoutMillis: 30000
+          // host: "localhost",
+          // user: "root",
+          // password: "",
+          // database: "vt_stream"
 		});
 
 

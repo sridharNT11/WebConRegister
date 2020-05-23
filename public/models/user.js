@@ -4,6 +4,7 @@ class User
 {
 	getUserbyUserId(user_id) {
 		return new Promise((resolve, reject) => {
+			
 			var sql = "select * from users where user_id = ?";
 	    	db.query(sql,[user_id], function (err, result) {
 	      		 return err ? reject(err) : resolve(result);
