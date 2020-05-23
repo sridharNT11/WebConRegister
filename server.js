@@ -10,8 +10,8 @@ const ioServer = require('socket.io')
 const app = express()
 const http = require('http')
 const https = require('https')
-const port_http = process.env.PORT || 3000 //for http 
-const port_https = process.env.PORT || 3443 // for https 
+const port_http = process.env.PORT || 80 //for http 
+const port_https = process.env.PORT || 443 // for https 
 const debug  = require('debug')('https')
 
 
